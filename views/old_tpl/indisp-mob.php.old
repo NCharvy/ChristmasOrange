@@ -1,0 +1,29 @@
+<?php
+    $title = "Catalogue | Indispensables mobile";
+    ob_start();
+?>
+    <main>
+        <div class="categ">
+            <h1>Les indispensables pour mon mobile</h1>
+        </div>
+        <h2><a href="/bons-plans">Les bons plans</a></h2>
+        <a class="return" href="/"><i class="fa fa-arrow-left"></i> Retour</a>
+        <section class="clearfix">
+            <?php
+                    foreach($indcat as $ic){
+                ?>
+                <div class="clearfix block-cat">
+                    <h3><a href="/tendance/<?php echo utf8_encode($ic->route_cat); ?>"><?php echo utf8_encode($ic->nom_cat); ?></a></h3>
+                    <div class="clearfix block-scat">
+                        <p><?php echo utf8_encode($ic->description_cat); ?></p><img src="<?php echo $ic->image_cat; ?>" />
+                    </div>
+                </div>
+                <?php
+                    }
+                ?>
+        </section>
+    </main>
+<?php
+    $content = ob_get_clean();
+    require_once("template.php");
+?>

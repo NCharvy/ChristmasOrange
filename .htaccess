@@ -1,0 +1,12 @@
+AddType video/avi   .avi
+AddType video/mp4   .mp4
+AddType video/ogg   .ogv
+
+<IfModule mod_rewrite.c>
+	Options -MultiViews
+	RewriteEngine On
+    RewriteBase /
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^ index.php [QSA,L]
+</IfModule>
