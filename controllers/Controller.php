@@ -6,21 +6,23 @@
     use Symfony\Component\HttpFoundation\File\UploadedFile;
 
     class Controller{
+        
+        private $app;
+
+        public function __construct(){
+            $this->app = new Application();
+            $this->app['debug'] = true;
+            $this->app->register(new Silex\Provider\TwigServiceProvider(), array(
+                'twig.path' => __DIR__.'/../views'
+            ));
+        }
         public function display_home(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $homedb = get_home();
             $prod = get_produits();
-			require '../views/home.php';
-            $home = ob_get_clean();
-            if(!$home){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $home;
-            }
+            
+            return  $this->app['twig']->render('/home.html.twig', array('homedb' => $homedb, 'prod' => $prod));
         }
         
         public function display_legal(Request $req){
@@ -30,8 +32,7 @@
             require '../views/legals.php';
             $legals = ob_get_clean();
             if(!$legals){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $legals;
@@ -47,8 +48,7 @@
 			require '../views/bonplan.php';
             $bp = ob_get_clean();
             if(!$bp){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $bp;
@@ -62,8 +62,7 @@
 			require '../views/categorie.php';
             $bps = ob_get_clean();
             if(!$bps){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $bps;
@@ -79,8 +78,7 @@
 			require '../views/thematique.php';
             $util = ob_get_clean();
             if(!$util){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $util;
@@ -95,8 +93,7 @@
 			require '../views/produit.php';
             $prod = ob_get_clean();
             if(!$prod){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $prod;
@@ -112,8 +109,7 @@
 			require '../views/thematique.php';
             $ind = ob_get_clean();
             if(!$ind){
-			     $app = new Application();
-			     $app->abort(404, "La page des cadeaux utiles est introuvable !");
+			     $this->app->abort(404, "La page des cadeaux utiles est introuvable !");
             }
             else{
                 return $ind;
@@ -129,8 +125,7 @@
 			require '../views/thematique.php';
             $tend = ob_get_clean();
             if(!$tend){
-			     $app = new Application();
-			     $app->abort(404, "La page des objets tendance est introuvable !");
+			     $this->app->abort(404, "La page des objets tendance est introuvable !");
             }
             else{
                 return $tend;
@@ -145,8 +140,7 @@
 			require '../views/selection.php';
             $tend = ob_get_clean();
             if(!$tend){
-			     $app = new Application();
-			     $app->abort(404, "La page des objets tendance est introuvable !");
+			     $this->app->abort(404, "La page des objets tendance est introuvable !");
             }
             else{
                 return $tend;
@@ -162,8 +156,7 @@
 			require '../views/thematique.php';
             $fun = ob_get_clean();
             if(!$fun){
-			     $app = new Application();
-			     $app->abort(404, "La page des objets tendance est introuvable !");
+			     $this->app->abort(404, "La page des objets tendance est introuvable !");
             }
             else{
                 return $fun;
@@ -179,8 +172,7 @@
 			require '../views/categorie.php';
             $cats = ob_get_clean();
             if(!$cats){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $cats;
@@ -230,7 +222,6 @@
         }
         
         public function post_login(Request $req){
-            $app = new Silex\Application();
             $session = $req->getSession();
             $login = $req->get('login');
             $passwd = sha1($req->get('passwd'));
@@ -239,26 +230,24 @@
             
             if($testco->ch_login === $login && $testco->ch_passwd === $passwd){
                 $session->set('user', array('username' => $login));
-                return $app->redirect('/christmasback');
+                return $this->app->redirect('/christmasback');
             }
             else{
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
         }
         
         public function back_logout(Request $req){
-            $app = new Silex\Application();
             $session = $req->getSession();
             $session->invalidate();
             
-            return $app->redirect('/login'); 
+            return $this->app->redirect('/login'); 
         }
         
         public function display_backlog(Request $req, $sdel = null, $sup = null, $scr = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($sdel) && !empty($sdel)){
@@ -279,7 +268,7 @@
             require_once('../views/chback/christmasback.php');
             $backin = ob_get_clean();
             if(!$backin){
-                $app->abort(404, "L'administration est introuvable !");
+                $this->app->abort(404, "L'administration est introuvable !");
             }
             else{
                 return $backin;
@@ -288,10 +277,9 @@
         }
         
         public function display_backlogbp(Request $req, $sdel = null, $sup = null, $scr = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($sdel) && !empty($sdel)){
@@ -312,7 +300,7 @@
             require_once('../views/chback/bp-table.php');
             $backin = ob_get_clean();
             if(!$backin){
-                $app->abort(404, "L'administration est introuvable !");
+                $this->app->abort(404, "L'administration est introuvable !");
             }
             else{
                 return $backin;
@@ -321,10 +309,9 @@
         }
         
         public function display_backlogcat(Request $req, $sup = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($sup) && !empty($sup)){
@@ -334,7 +321,7 @@
             require_once('../views/chback/cat-table.php');
             $backin = ob_get_clean();
             if(!$backin){
-                $app->abort(404, "L'administration est introuvable !");
+                $this->app->abort(404, "L'administration est introuvable !");
             }
             else{
                 return $backin;
@@ -343,7 +330,6 @@
         }
         
         public function post_insert(Request $req){
-            $app = new Application();
             ob_start();
             $nom = $req->get('nom_prod');
             $desc = $req->get('desc_prod');
@@ -381,12 +367,11 @@
                 return '';
             }
             else{
-                return $app->redirect('/christmasback/statecr/crtd');
+                return $this->app->redirect('/christmasback/statecr/crtd');
             }
         }
         
         public function post_update(Request $req, $ref){
-            $app = new Application();
             ob_start();
             $nom = utf8_decode($req->get('nom_prod'));
             $desc = utf8_decode($req->get('desc_prod'));
@@ -417,18 +402,17 @@
             
             $upprod = update_produit($ref, $nom, $desc, $prix, $select, $id_cat);
             if(!$upprod || (isset($upimg) && !$upimg) || (isset($upvid) && !$upvid)){
-                return $app->redirect('/christmasback/errup/'.$ref);
+                return $this->app->redirect('/christmasback/errup/'.$ref);
             }
             else{
-                return $app->redirect('/christmasback/stateup/updt');
+                return $this->app->redirect('/christmasback/stateup/updt');
             }
         }
         
         public function display_create(Request $req, $errcr = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($errcr) && !empty($errcr)){
@@ -438,8 +422,7 @@
 			require '../views/chback/create.php';
             $create = ob_get_clean();
             if(!$create){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $create;
@@ -447,10 +430,9 @@
         }
         
         public function display_update(Request $req, $ref, $stup = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($errup) && !empty($errup)){
@@ -461,8 +443,7 @@
 			require '../views/chback/update.php';
             $create = ob_get_clean();
             if(!$create){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $create;
@@ -470,18 +451,16 @@
         }
         
         public function display_fiche(Request $req, $ref){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             $prod = get_prod_up($ref);
 			require '../views/chback/fiche-produit.php';
             $fiche = ob_get_clean();
             if(!$fiche){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $fiche;
@@ -489,35 +468,32 @@
         }
         
         public function backprod_del(Request $req, $ref){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             $delprod = delete_prod_by_ref($ref);
             if($delprod){
-                return $app->redirect('/christmasback/statedel/delt');  
+                return $this->app->redirect('/christmasback/statedel/delt');  
             }
             else{
-                return $app->redirect('/christmasback/statedel/err');
+                return $this->app->redirect('/christmasback/statedel/err');
             }
         }
         
         /** Partie bons plans */
         
         public function display_bptable(Request $req){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             $bonsplans = get_bp_table();
 			require '../views/chback/bp-table.php';
             $bp = ob_get_clean();
             if(!$bp){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $bp;
@@ -525,25 +501,23 @@
         }
         
         public function backbp_del(Request $req, $id){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             $delbp = delete_ope_by_id($id);
             if($delprod){
-                return $app->redirect('/christmasback/statedelbp/delt');  
+                return $this->app->redirect('/christmasback/statedelbp/delt');  
             }
             else{
-                return $app->redirect('/christmasback/statedelbp/err');
+                return $this->app->redirect('/christmasback/statedelbp/err');
             }
         }
         
         public function display_updatebp(Request $req, $id, $stup = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($errup) && !empty($errup)){
@@ -554,8 +528,7 @@
 			require '../views/chback/update-bp.php';
             $createbp = ob_get_clean();
             if(!$createbp){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $createbp;
@@ -563,10 +536,9 @@
         }
         
         public function display_createbp(Request $req, $errcr = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($errcr) && !empty($errcr)){
@@ -576,8 +548,7 @@
 			require '../views/chback/create-bp.php';
             $createbp = ob_get_clean();
             if(!$createbp){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $createbp;
@@ -585,7 +556,6 @@
         }
         
         public function post_insertbp(Request $req){
-            $app = new Application();
             ob_start();
             $ref = $req->get('ref_prod');
             $desc = $req->get('desc_ope');
@@ -599,16 +569,15 @@
             $crbp = create_ope($desc, $cp, $ref);
             
             if(!$crbp){
-                return $app->redirect('/christmasback/statecrbp/errcr');
+                return $this->app->redirect('/christmasback/statecrbp/errcr');
                 return $ref . $desc . $coupon->getClientOriginalName();
             }
             else{
-                return $app->redirect('/christmasback/statecrbp/crtd');
+                return $this->app->redirect('/christmasback/statecrbp/crtd');
             }
         }
         
         public function post_updatebp(Request $req, $id){
-            $app = new Application();
             ob_start();
             $id = $req->get('id_ope');
             $ref = $req->get('ref_prod');
@@ -625,28 +594,26 @@
             
             $upbplan = update_ope($id, $desc, $ref);
             if(!$upprod || (isset($updcp) && !$updcp)){
-                return $app->redirect('/christmasback/errupbp/'.$id);
+                return $this->app->redirect('/christmasback/errupbp/'.$id);
             }
             else{
-                return $app->redirect('/christmasback/stateupbp/updt');
+                return $this->app->redirect('/christmasback/stateupbp/updt');
             }
         }
         
         /** Partie categories */
         
         public function display_cattable(Request $req){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             $categories = get_categories();
 			require '../views/chback/cat-table.php';
             $cat = ob_get_clean();
             if(!$cat){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $cat;
@@ -654,10 +621,9 @@
         }
         
         public function display_updatecat(Request $req, $id, $stup = null){
-            $app = new Application();
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
-                return $app->redirect('/login');
+                return $this->app->redirect('/login');
             }
             ob_start();
             if(isset($errup) && !empty($errup)){
@@ -667,8 +633,7 @@
 			require '../views/chback/update-cat.php';
             $upcat = ob_get_clean();
             if(!$upcat){
-			     $app = new Application();
-			     $app->abort(404, "La page d'accueil est introuvable !");
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
             }
             else{
                 return $upcat;
@@ -676,7 +641,6 @@
         }
         
         public function post_updatecat(Request $req, $id){
-            $app = new Application();
             ob_start();
             $id = $req->get('id_cat');
             $desc = $req->get('description_cat');
@@ -692,10 +656,10 @@
             
             $upcat = update_cat_desc($id, $desc);
             if(!$upprod || (isset($updcp) && !$updcp)){
-                return $app->redirect('/christmasback/errupcat/'.$id);
+                return $this->app->redirect('/christmasback/errupcat/'.$id);
             }
             else{
-                return $app->redirect('/christmasback/stateupcat/updt');
+                return $this->app->redirect('/christmasback/stateupcat/updt');
             }
         }
     }

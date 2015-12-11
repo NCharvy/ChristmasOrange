@@ -1,0 +1,21 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue de noël Orange{% endblock %}
+
+{% block content %}
+    <h1>Catalogue de noël Orange</h1>
+    <div id="slide-bp">
+        <div u="slides" id="slides">
+            {% for p in prod %}
+            <div><a href="{% filter escape %}{% spaceless %}/produit/{{ p.ref_prod }}{% endspaceless %}{% endfilter %}"><img u="image" src="/assets/img/spinpadgrip-support-tablette.jpg" /></a></div>
+            {% endfor %}
+        </div>
+        <span data-u="arrowleft" class="jssora12l" data-autocenter="2"></span>
+        <span data-u="arrowright" class="jssora12r" data-autocenter="2"></span>
+    </div>
+    <nav id="nav-them" class="clearfix">
+        {% for h in homedb %}
+        <div class="nav-popout" style="background-image : url('assets/img/{% filter escape %}{% spaceless %}{{ h.img_them }}{% endspaceless %}{% endfilter %}'); background-size : 150px 150px;"><p><a href="{% filter escape %}{% spaceless %}{{ h.link }}{% endspaceless %}{% endfilter %}">{{ h.nom_them|convert_encoding('UTF-8', 'ISO-8859-1') }}</a></p></div>
+        {% endfor %}
+    </nav>
+{% endblock %}

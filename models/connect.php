@@ -2,5 +2,5 @@
     define('USER', "root");
     define('PASSWD', "nath2693");
     define('SERVER', "localhost");
-    define('BASE', "orange-noel");
+    define('BASE', "orange-catalogue");
 ?>

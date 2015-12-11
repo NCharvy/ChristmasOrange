@@ -1,7 +1,8 @@
 <!doctype html>
 <html lang="fr">
+    {% block head %}
     <head>
-        <title><?php echo $title; ?></title>
+        <title>{% block title %}{% endblock %}</title>
         <meta charset="utf-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="Site vitrine présentant le catalogue de noël des objets connectés Orange" />
@@ -9,6 +10,7 @@
         <link rel="stylesheet" type="text/css" href="/assets/css/styles.css" />
         <link rel="stylesheet" type="text/css" href="/assets/font-awesome-4.4.0/css/font-awesome.min.css" />
     </head>
+    {% endblock %}
     <body>
         <header>
             <div class="main-wrapper clearfix">
@@ -20,7 +22,8 @@
             </div>
         </header>
         <div class="main-wrapper">
-            <?php echo $content; ?>
+            {% block content %}
+            {% endblock %}
         </div>
         <footer>
             <div class="main-wrapper clearfix">
