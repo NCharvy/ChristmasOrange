@@ -1,0 +1,25 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | {{ them.nom_them|convert_encoding('UTF-8', 'ISO-8859-1') }}{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="categ">
+            <h1>{{ them.nom_them|convert_encoding('UTF-8', 'ISO-8859-1') }}</h1>
+        </div>
+        <h2><a href="/bons-plans/{% filter escape %}{% spaceless %}{{ them.id_them }}{% endspaceless %}{% endfilter %}">Les bons plans</a></h2>
+        <div id="return-them">
+            <a class="return" href="/"><i class="fa fa-arrow-left"></i> Retour</a>
+        </div>
+        <section class="clearfix">
+                {% for c in cat %}
+                <div id="block-cat-{% filter escape %}{% spaceless %}{{ loop.index }}{% endspaceless %}{% endfilter %}" class="clearfix block-cat">
+                    <h3><a href="{% filter escape %}{% spaceless %}{{ them.link|convert_encoding('UTF-8', 'ISO-8859-1') }}/{{ c.route_cat|convert_encoding('UTF-8', 'ISO-8859-1') }}{% endspaceless %}{% endfilter %}">{{ c.nom_cat|convert_encoding('UTF-8', 'ISO-8859-1') }}</a></h3>
+                    <div class="clearfix block-scat">
+                        <p>{{ c.description_cat|convert_encoding('UTF-8', 'ISO-8859-1') }}</p><img src="{% filter escape %}{% spaceless %}{{ c.image_cat }}{% endspaceless %}{% endfilter %}" />
+                    </div>
+                </div>
+                {% endfor %}
+        </section>
+    </main>
+{% endblock %}

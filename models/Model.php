@@ -23,6 +23,41 @@
         return $homedb;
     }
 
+    function get_infos(){
+        $bdd = connect_db();
+        
+        $sql = "SELECT * FROM infos WHERE id_cata = 1";
+        
+        $result = $bdd->query($sql);
+        $infos = $result->fetch(PDO::FETCH_OBJ);
+        
+        return $infos;
+    }
+
+    function update_infos($titre, $annee, $copy){
+        $bdd = connect_db();
+        
+        $sql = "UPDATE infos SET titre = :titre, annee = :annee, copy = :copy WHERE id_cata = 1";
+        $result = $bdd->prepare($sql);
+        $result->bindParam(':titre', $titre);
+        $result->bindParam(':annee', $annee);
+        $result->bindParam(':copy', $copy);
+        $upinfos = $result->execute();
+        
+        return $upinfos;
+    }
+
+    function update_background($bck){
+        $bdd = connect_db();
+        
+        $sql = "UPDATE infos SET background = :bck WHERE id = 1";
+        $result = $bdd->prepare($sql);
+        $result->bindParam(':bck', $bck);
+        $upback = $result->execute();
+        
+        return $upback;
+    }
+
     function get_them($id){
         $bdd = connect_db();
         

@@ -8,6 +8,7 @@
     class Controller{
         
         private $app;
+        private $infos;
 
         public function __construct(){
             $this->app = new Application();
@@ -15,6 +16,7 @@
             $this->app->register(new Silex\Provider\TwigServiceProvider(), array(
                 'twig.path' => __DIR__.'/../views'
             ));
+            $this->infos = get_infos();
         }
         public function display_home(Request $req){
             $session = $req->getSession();
@@ -22,173 +24,98 @@
             $homedb = get_home();
             $prod = get_produits();
             
-            return  $this->app['twig']->render('/home.html.twig', array('homedb' => $homedb, 'prod' => $prod));
+            return  $this->app['twig']->render('/home.html.twig', array('homedb' => $homedb, 'prod' => $prod, 'infos' => $this->infos));
         }
         
         public function display_legal(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
-            require '../views/legals.php';
-            $legals = ob_get_clean();
-            if(!$legals){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $legals;
-            }
+            
+            return  $this->app['twig']->render('/legals.html.twig', array('infos' => $this->infos));
         }
         
         public function display_bp(Request $req, $id){
+            $referer = $_SERVER['HTTP_REFERER'];
             $session = $req->getSession();
             $session->invalidate();
             ob_start();
             $bpcat = get_bp($id);
             $them = get_them($id);
-			require '../views/bonplan.php';
-            $bp = ob_get_clean();
-            if(!$bp){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $bp;
-            }
-        }
-        
-        public function display_bp_cat(Request $req, $cat){
-            $session = $req->getSession();
-            $session->invalidate();
-            ob_start();
-			require '../views/categorie.php';
-            $bps = ob_get_clean();
-            if(!$bps){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $bps;
-            }
+            
+            return  $this->app['twig']->render('/bonplan.html.twig', array('bpcat' => $bpcat, 'them' => $them, 'referer' => $referer, 'infos' => $this->infos));
         }
         
         public function display_utiles(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $cat = get_utl_cat();
             $them = get_utiles();
-			require '../views/thematique.php';
-            $util = ob_get_clean();
-            if(!$util){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $util;
-            }
+            
+            return  $this->app['twig']->render('/thematique.html.twig', array('cat' => $cat, 'them' => $them, 'infos' => $this->infos));
         }
         
         public function display_prod_by_ref(Request $req, $ref){
+	    $referer = $_SERVER['HTTP_REFERER'];
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $prodsolo = get_prod_by_ref($ref);
-			require '../views/produit.php';
-            $prod = ob_get_clean();
-            if(!$prod){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $prod;
-            }
+            
+            return  $this->app['twig']->render('/produit.html.twig', array('prodsolo' => $prodsolo, 'infos' => $this->infos, 'referer' => $referer));
         }
         
         public function display_indisp(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $cat = get_ind_cat();
             $them = get_indispmod();
-			require '../views/thematique.php';
-            $ind = ob_get_clean();
-            if(!$ind){
-			     $this->app->abort(404, "La page des cadeaux utiles est introuvable !");
-            }
-            else{
-                return $ind;
-            }
+            
+            return  $this->app['twig']->render('/thematique.html.twig', array('cat' => $cat, 'them' => $them, 'infos' => $this->infos));
         }
         
         public function display_tendance(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $cat = get_td_cat();
             $them = get_tendance();
-			require '../views/thematique.php';
-            $tend = ob_get_clean();
-            if(!$tend){
-			     $this->app->abort(404, "La page des objets tendance est introuvable !");
-            }
-            else{
-                return $tend;
-            }
+            
+			return  $this->app['twig']->render('/thematique.html.twig', array('cat' => $cat, 'them' => $them, 'infos' => $this->infos));
         }
         
         public function display_tendance_prod(Request $req){
+            $referer = $_SERVER['HTTP_REFERER'];
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $tend = get_selection();
-			require '../views/selection.php';
-            $tend = ob_get_clean();
-            if(!$tend){
-			     $this->app->abort(404, "La page des objets tendance est introuvable !");
-            }
-            else{
-                return $tend;
-            }
+            
+            return  $this->app['twig']->render('/selection.html.twig', array('tend' => $tend, 'referer' => $referer, 'infos' => $this->infos));
         }
         
         public function display_fun(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $cat = get_fun_cat();
             $them = get_fun();
-			require '../views/thematique.php';
-            $fun = ob_get_clean();
-            if(!$fun){
-			     $this->app->abort(404, "La page des objets tendance est introuvable !");
-            }
-            else{
-                return $fun;
-            }
+            
+            return  $this->app['twig']->render('/thematique.html.twig', array('cat' => $cat, 'them' => $them, 'infos' => $this->infos));
         }
         
         public function display_cat(Request $req, $cat){
+            $referer = $_SERVER['HTTP_REFERER'];
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $name = get_cat_name($cat);
             $prods = get_produits_cat($cat);
-			require '../views/categorie.php';
-            $cats = ob_get_clean();
-            if(!$cats){
-			     $this->app->abort(404, "La page d'accueil est introuvable !");
-            }
-            else{
-                return $cats;
-            }
+            
+            return  $this->app['twig']->render('/categorie.html.twig', array('name' => $name, 'prods' => $prods, 'referer' => $referer, 'infos' => $this->infos));
         }
         
         public function post_search(Request $req){
             $session = $req->getSession();
             $session->invalidate();
-            ob_start();
             $search = $req->get('search');
             $result = get_search($search);
-            require_once('../views/search.php');
-            $post = ob_get_clean();
-                
-            return $post;   
+            
+            return  $this->app['twig']->render('/search.html.twig', array('result' => $result, 'infos' => $this->infos)); 
         }
         
         
@@ -296,14 +223,14 @@
             if(isset($scr) && !empty($scr)){
                 $statecr = "Un nouveau produit a été créé !";
             }
-            $products = get_prods();
+            $bonsplans = get_bp_table();
             require_once('../views/chback/bp-table.php');
-            $backin = ob_get_clean();
-            if(!$backin){
+            $backbp = ob_get_clean();
+            if(!$backbp){
                 $this->app->abort(404, "L'administration est introuvable !");
             }
             else{
-                return $backin;
+                return $backbp;
             }
             
         }
@@ -317,14 +244,14 @@
             if(isset($sup) && !empty($sup)){
                 $stateup = "Modification effectuée";
             }
-            $products = get_prods();
+            $categories = get_categories();
             require_once('../views/chback/cat-table.php');
-            $backin = ob_get_clean();
-            if(!$backin){
+            $backcat = ob_get_clean();
+            if(!$backcat){
                 $this->app->abort(404, "L'administration est introuvable !");
             }
             else{
-                return $backin;
+                return $backcat;
             }
             
         }
@@ -333,7 +260,8 @@
             ob_start();
             $nom = $req->get('nom_prod');
             $desc = $req->get('desc_prod');
-            $prix = $req->get('prix_prod');
+            $sprix = $req->get('prix_prod');
+			$prix = str_replace('€', '&euro;', $sprix);
             
             $upimg = $req->files->get('img_prod');
             if(isset($upimg) && !empty($upimg)){
@@ -374,9 +302,12 @@
         public function post_update(Request $req, $ref){
             ob_start();
             $nom = utf8_decode($req->get('nom_prod'));
-            $desc = utf8_decode($req->get('desc_prod'));
-            $prix = utf8_decode($req->get('prix_prod'));
+            $sdesc = utf8_decode($req->get('desc_prod'));
+            $desc = nl2br($sdesc);
+            $sprix = $req->get('prix_prod');
+			$prix = str_replace('€', '&euro;', $sprix);
             $upimg = $req->files->get('img_prod');
+
             if(isset($upimg) && !empty($upimg)){
                 if($upimg != NULL){
                     $upimg->move(__DIR__.'../upload/img', $upimg->getClientOriginalName());
@@ -514,7 +445,7 @@
             }
         }
         
-        public function display_updatebp(Request $req, $id, $stup = null){
+        public function display_updatebp(Request $req, $id, $errup = null){
             $session = $req->getSession();
             if(null === $user = $session->get('user')){
                 return $this->app->redirect('/login');
@@ -558,7 +489,8 @@
         public function post_insertbp(Request $req){
             ob_start();
             $ref = $req->get('ref_prod');
-            $desc = $req->get('desc_ope');
+            $sdesc = $req->get('desc_ope');
+			$desc = str_replace('€', '&euro;', $sdesc);
             
             $coupon = $req->files->get('coupon');
             if(isset($coupon) && !empty($coupon)){
@@ -581,7 +513,7 @@
             ob_start();
             $id = $req->get('id_ope');
             $ref = $req->get('ref_prod');
-            $desc = $req->get('desc_ope');
+            $desc = utf8_decode($req->get('desc_ope'));
             
             $coupon = $req->files->get('coupon');
             if(isset($coupon) && !empty($coupon)){
@@ -593,15 +525,15 @@
             }
             
             $upbplan = update_ope($id, $desc, $ref);
-            if(!$upprod || (isset($updcp) && !$updcp)){
-                return $this->app->redirect('/christmasback/errupbp/'.$id);
+            if(!$upbplan || (isset($updcp) && !$updcp)){
+                return $this->app->redirect('/christmasback/errupbp/'.$id.'/err');
             }
             else{
                 return $this->app->redirect('/christmasback/stateupbp/updt');
             }
         }
         
-        /** Partie categories */
+        /** Partie categories    */
         
         public function display_cattable(Request $req){
             $session = $req->getSession();
@@ -655,11 +587,51 @@
             }
             
             $upcat = update_cat_desc($id, $desc);
-            if(!$upprod || (isset($updcp) && !$updcp)){
-                return $this->app->redirect('/christmasback/errupcat/'.$id);
+            if(!$upcat || (isset($upimg) && !$upimg)){
+                return $this->app->redirect('/christmasback/errupcat/'.$id.'/err');
             }
             else{
                 return $this->app->redirect('/christmasback/stateupcat/updt');
+            }
+        }
+        
+        public function display_infos(Request $req){
+            $session = $req->getSession();
+            if(null === $user = $session->get('user')){
+                return $this->app->redirect('/login');
+            }
+            ob_start();
+            $infos = get_infos();
+            require '../views/chback/infos.php';
+            $pinfo = ob_get_clean();
+            if(!$pinfo){
+			     $this->app->abort(404, "La page d'accueil est introuvable !");
+            }
+            else{
+                return $pinfo;
+            }
+        }
+        
+        public function post_updateinfo(Request $req){
+            ob_start();
+            $titre = utf8_decode($req->get('titre'));
+            $annee = $req->get('annee');
+            $copy = $req->get('copy');
+            $image = $req->files->get('background');
+            if(isset($image) && !empty($image)){
+                if($image != NULL){
+                    $image->move('assets/img/', $image->getClientOriginalName());
+                    $img = $image->getClientOriginalName();
+                    $upimg = update_background($img);
+                }
+            }
+            
+            $upinfo = update_infos($titre, $annee, $copy);
+            if(!$upinfo || (isset($upimg) && !$upimg)){
+                return $this->app->redirect('/christmasback/infos');
+            }
+            else{
+                return $this->app->redirect('/christmasback');
             }
         }
     }

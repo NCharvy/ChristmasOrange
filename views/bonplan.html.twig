@@ -1,0 +1,21 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | Bons plans{% endblock %}
+
+{% block content %}
+    <main>
+        <div class="categ">
+            <h1>Bons plans</h1>
+        </div>
+        <a class="return" href="{% filter escape %}{% spaceless %}{{ referer }}{% endspaceless %}{% endfilter %}"><i class="fa fa-arrow-left"></i> Retour</a>
+        <section id="sect-cat" class="clearfix">
+            {% for bpc in bpcat %}
+            <article class="item-prod">
+                <h3><a href="/produit/{% filter escape %}{% spaceless %}{{ bpc.ref_prod }}{% endspaceless %}{% endfilter %}">{{ bpc.nom_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}</a></h3>
+                <p>Offre : {{ bpc.nom_ope|convert_encoding('UTF-8', 'ISO-8859-1')|raw }}</p>
+                <p><a href="/upload/coupons/{% filter escape %}{% spaceless %}{{ bpc.coupon }}{% endspaceless %}{% endfilter %}">Télécharger le coupon</a></p>
+            </article>
+            {% endfor %}
+        </section>
+    </main>
+{% endblock %}

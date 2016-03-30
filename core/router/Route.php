@@ -68,7 +68,7 @@
             
             $this->app->post('/christmasback/postupbp/{id}', 'Controller::post_updatebp');
             
-            $this->app->get('/christmasback/errupbp/{id}/{stup}', 'Controller::display_updatebp');
+            $this->app->get('/christmasback/errupbp/{id}/{errup}', 'Controller::display_updatebp');
             
             $this->app->get('/christmasback/stateupbp/{sup}', 'Controller::display_backlogbp');
             
@@ -82,6 +82,8 @@
             $this->app->get('/christmasback/upcat/{id}', 'Controller::display_updatecat');
             
             $this->app->post('/christmasback/postupcat/{id}', 'Controller::post_updatecat');
+            
+            $this->app->get('/christmasback/stateupcat/{sup}', 'Controller::display_backlogcat');
             
             
             $this->app->get('/christmasback/statedel/{sdel}', 'Controller::display_backlog');
@@ -107,6 +109,11 @@
             $this->app->get('/christmasback/del/{ref}', 'Controller::backprod_del');
             
             $this->app->get('/christmasback/statedel/{sdel}', 'Controller::display_backlog');
+            
+            
+            $this->app->get('/christmasback/infos', 'Controller::display_infos');
+            
+            $this->app->post('/christmasback/update-infos', 'Controller::post_updateinfo');
 
             //Request::setTrustedProxies(array('127.0.0.1'));
             

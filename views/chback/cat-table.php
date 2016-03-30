@@ -14,7 +14,7 @@
     <main>
         <div class="tete clearfix">
             <nav id="menu-items">
-                <a href="/christmasback">Produits</a><a href="/christmasback/bp-table">Bons plans</a><a href="/christmasback/cat-table">Catégories</a>
+                <a href="/christmasback">Produits</a><a href="/christmasback/bp-table">Bons plans</a><a href="/christmasback/cat-table">Catégories</a><a href="/christmasback/infos">Informations</a>
             </nav>
             <h2 style="text-align : center;">Liste des catégories</h2>
             <?php

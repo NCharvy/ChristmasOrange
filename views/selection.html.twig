@@ -1,0 +1,19 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | Sélection tendance{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>Sélection tendance {{ "now"|date("Y") }}</h1>
+        <a id="return-cat" class="return" href="{% filter escape %}{% spaceless %}{{ referer }}{% endspaceless %}{% endfilter %}"><i class="fa fa-arrow-left"></i> Retour</a>
+        <section id="sect-cat" class="clearfix">
+            {% for t in tend %}
+            <article class="item-prod">
+                <h3><a href="/produit/{% filter escape %}{% spaceless %}{{ t.ref_prod }}{% endspaceless %}{% endfilter %}">{{ t.nom_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}</a></h3>
+                <p id="p-img"><img src="/upload/img/{% filter escape %}{% spaceless %}{{ t.image_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}{% endspaceless %}{% endfilter %}" /></p>
+                <p id="p-prix">A partir de {{ t.prix|raw }}</p>
+            </article>
+            {% endfor %}
+        </section>
+    </main>
+{% endblock %}

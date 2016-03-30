@@ -1,0 +1,19 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | Recherche{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>Résultat de vos recherches</h1>
+        <a id="return-cat" class="return" href="/"><i class="fa fa-arrow-left"></i> Retour</a>
+        <section id="sect-cat" class="clearfix">
+            {% for r in result %}
+            <article class="item-prod">
+                <h3><a href="/produit/{% filter escape %}{% spaceless %}{{ r.ref_prod }}{% endspaceless %}{% endfilter %}">{{ r.nom_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}</a></h3>
+                <p id="p-img"><img src="/upload/img/{% filter escape %}{% spaceless %}{{ r.image_prod }}{% endspaceless %}{% endfilter %}" /></p>
+                <p id="p-prix">A partir de {{ r.prix|raw }}</p>
+            </article>
+            {% endfor %}
+        </section>
+    </main>
+{% endblock %}

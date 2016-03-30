@@ -31,7 +31,9 @@
             </div>
             <div class="input-alt">
                 <p class="alt-lab">Description du produit : </p>
-                <textarea name="desc_prod"><?php echo utf8_encode($prod->description); ?></textarea>
+                
+                <?php $description = str_replace("<br />", "\n", $prod->description); ?>
+                <textarea name="desc_prod"><?php echo utf8_encode($description); ?></textarea>
             </div>
             <div class="input-alt">
                 <p class="alt-lab">Prix du produit : </p>

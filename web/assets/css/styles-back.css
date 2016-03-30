@@ -89,7 +89,7 @@ a{
 
 nav{
     margin : auto;
-    width : 500px;
+    width : 687px;
 }
 
 nav a{
@@ -270,4 +270,9 @@ i:last-of-type{
 
 i{
     color : #fff;
+}
+
+#prod-table_wrapper{
+    width : 90% !important;
+    margin : auto;
 }

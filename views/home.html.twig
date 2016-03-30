@@ -3,7 +3,7 @@
 {% block title %}Catalogue de noël Orange{% endblock %}
 
 {% block content %}
-    <h1>Catalogue de noël Orange</h1>
+    <h1>{{ infos.titre|convert_encoding('UTF-8', 'ISO-8859-1') }}</h1>
     <div id="slide-bp">
         <div u="slides" id="slides">
             {% for p in prod %}

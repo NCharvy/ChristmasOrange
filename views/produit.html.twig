@@ -1,15 +1,14 @@
-<?php
-    $title = "Catalogue | Produit";
-    ob_start();
-?>
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | Produit{% endblock %}
+
+{% block content %}
     <main>
-        <h1><?php echo utf8_encode($prodsolo->nom_prod); ?></h1>
-        <a class="return" href="<?php echo $_SERVER['HTTP_REFERER']; ?>"><i class="fa fa-arrow-left"></i> Retour</a>
+        <h1>{{ prodsolo.nom_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}</h1>
+        <a class="return" href="{% filter escape %}{% spaceless %}{{ referer }}{% endspaceless %}{% endfilter %}"><i class="fa fa-arrow-left"></i> Retour</a>
         <section id="sect-prod">
             <div class="info-prod">
-                <?php
-                    if(isset($prodsolo->video_test) && !empty($prodsolo->video_test)){
-                ?>
+                {% if prodsolo.video_test is defined and prodsolo.video_test is not empty %}
                 <article id="art-vid">
                     <p style="text-align : center;">Vidéo de présentation du produit</p>
                     <video width="400" height="220" controls="controls">
@@ -23,22 +22,17 @@
                         </object>
                     </video>
                 </article>
-                <?php
-                    }
-                ?>
+                {% endif %}
                 <div class="clearfix">
-                    <img src="/upload/img/<?php echo utf8_encode($prodsolo->img_prod); ?>" />
+                    <img src="/upload/img/{% filter escape %}{% spaceless %}{{ prodsolo.image_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}{% endspaceless %}{% endfilter %}" />
                     <div id="prod-info">
                         <ul>
-                            <li><p style="margin : 0; font-weight : bold; font-size : 16px; margin-bottom : 10px;">Description : </p><?php echo utf8_encode($prodsolo->description); ?></li>
-                            <li><p style="margin : 0; margin-top : 10px;">A partir de <span style="font-weight : bold;"><?php echo utf8_encode($prodsolo->prix); ?></span></p></li>
+                            <li><p style="margin : 0; font-weight : bold; font-size : 16px; margin-bottom : 10px;">Description : </p>{{ prodsolo.description|convert_encoding('UTF-8', 'ISO-8859-1')|raw }}</li>
+                            <li><p style="margin : 0; margin-top : 10px;">A partir de <span style="font-weight : bold;">{{ prodsolo.prix|raw }}</span></p></li>
                         </ul>
                     </div>
                 </div>
             </div>
         </section>
     </main>
-<?php
-    $content = ob_get_clean();
-    require_once("template.php");
-?>
+{% endblock %}

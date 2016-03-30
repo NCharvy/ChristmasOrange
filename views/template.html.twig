@@ -9,9 +9,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" href="/assets/css/styles.css" />
         <link rel="stylesheet" type="text/css" href="/assets/font-awesome-4.4.0/css/font-awesome.min.css" />
+        <link rel="icon" href="/assets/img/orange.ico" />
     </head>
     {% endblock %}
-    <body>
+    <body style="background-image : url('/assets/img/{% filter escape %}{% spaceless %}{{ infos.background }}{% endspaceless %}{% endfilter %}');">
         <header>
             <div class="main-wrapper clearfix">
                 <a href="/"><img src="/assets/img/orange-logo.png" alt="Logo Orange" width="80"/></a>
@@ -27,7 +28,7 @@
         </div>
         <footer>
             <div class="main-wrapper clearfix">
-                <p id="copy">2015 &copy; Orange - Catalogue de noël</p>
+                <p id="copy">{{ infos.annee }} &copy; {{ infos.copy|convert_encoding('UTF-8', 'ISO-8859-1') }}</p>
                 <p id="legal"><a href="/mentions-legales">Mentions légales</a></p>
             </div>
         </footer>

@@ -1,0 +1,38 @@
+{% extends "template.html.twig" %}
+
+{% block title %}Catalogue | Produit{% endblock %}
+
+{% block content %}
+    <main>
+        <h1>{{ prodsolo.nom_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}</h1>
+        <a class="return" href="{% filter escape %}{% spaceless %}{{ referer }}{% endspaceless %}{% endfilter %}"><i class="fa fa-arrow-left"></i> Retour</a>
+        <section id="sect-prod">
+            <div class="info-prod">
+                {% if prodsolo.video_test is defined and prodsolo.video_test is not empty %}
+                <article id="art-vid">
+                    <p style="text-align : center;">Vidéo de présentation du produit</p>
+                    <video width="400" height="220" controls="controls">
+                        <source src="/upload/video/test.avi" type="video/avi" />
+                        <source src="/upload/video/test.mp4" type="video/mp4" />
+                        <source src="/upload/video/test.ogv" type="video/ogg" />
+                        <object width="480" height="260" data="http://www.youtube.com/watch?v=hoca3w_Z5RA"> 
+                            <param name="movie" value="http://www.youtube.com/watch?v=hoca3w_Z5RA" />
+                            <param name="wmode" value="transparent" />
+                            Vous n'avez ni Flash ni une version assez récente de votre navigateur...
+                        </object>
+                    </video>
+                </article>
+                {% endif %}
+                <div class="clearfix">
+                    <img src="/upload/img/{% filter escape %}{% spaceless %}{{ prodsolo.image_prod|convert_encoding('UTF-8', 'ISO-8859-1') }}{% endspaceless %}{% endfilter %}" />
+                    <div id="prod-info">
+                        <ul>
+                            <li><p style="margin : 0; font-weight : bold; font-size : 16px; margin-bottom : 10px;">Description : </p>{{ prodsolo.description|convert_encoding('UTF-8', 'ISO-8859-1')|raw }}</li>
+                            <li><p style="margin : 0; margin-top : 10px;">A partir de <span style="font-weight : bold;">{{ prodsolo.prix|raw }}</span></p></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+{% endblock %}
